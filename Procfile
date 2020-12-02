@@ -1,1 +1,1 @@
-web: gunicorn sadaqah.wsgi --log-file -
+web: gunicorn sadaqah.wsgi --log-file - --bind 0.0.0.0:$PORT
