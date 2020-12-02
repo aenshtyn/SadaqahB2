@@ -1,0 +1,1 @@
+web: gunicorn sadaqah.wsgi --log-file -
