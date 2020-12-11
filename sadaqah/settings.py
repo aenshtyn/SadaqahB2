@@ -170,7 +170,7 @@ django_heroku.settings(locals())
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
-    'https://sadaqah.netlify.app',
+    'http://localhost:8081',
 )
 
 PHONE_NUMBER_REGION = 'KE'
