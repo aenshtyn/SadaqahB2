@@ -12,7 +12,6 @@ from donations.serializers import AppealSerializer, DonationSerializer
 from rest_framework.decorators import api_view
 # Create your views here.
 
-
 @api_view(['GET', 'POST','DELETE'])
 def appeal_list(request):
 
