@@ -1,17 +1,16 @@
 from django.shortcuts import render
 from django.http  import HttpResponse
-from django.shortcuts import render
-
+# from django.shortcuts import render
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser 
 from rest_framework import status
-
-from donations.models import Appeal, Donation
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .models import Appeal
+from .models import Donation
 from donations.serializers import AppealSerializer, DonationSerializer
 from rest_framework.decorators import api_view
 # Create your views here.
-
-
 
 
 @api_view(['GET', 'POST','DELETE'])
@@ -109,3 +108,32 @@ def donation_list(request):
 def home(request):
 
     return render(request, 'index.html')
+
+
+
+class AppealList(APIView):
+    def get(self, request, format=None):
+        all_appeals = Appeal.objects.all()
+        serializers = AppealSerializer(all_appeals, many=True)
+        return Response(serializers.data)
+
+    def post(self, request, format=None):
+        serializers = AppealSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)    
+
+
+class DonationList(APIView):
+    def get(self, request, format=None):
+        all_donations = Donation.objects.all()
+        serializers = DonationSerializer(all_donations, many=True)
+        return Response(serializers.data)
+
+    def post(self, request, format=None):
+        serializers = DonationSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)   
