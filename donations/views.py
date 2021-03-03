@@ -1,16 +1,31 @@
 from django.shortcuts import render
-from django.http  import HttpResponse
+from django.http  import HttpResponse, Http404
 # from django.shortcuts import render
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser 
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Appeal
+from .models import Appeal, Donation, Location
 from .models import Donation
 from donations.serializers import AppealSerializer, DonationSerializer
 from rest_framework.decorators import api_view
-# Create your views here.
+# Create your views here.=l
+
+
+def home(request):
+    appeals = Appeal.all_appeals()
+    locations = Location.all_locations()
+
+    return render(request, 'index.html',{"locations": locations, "appeals": appeals})
+
+def donations(request):
+    donations = Donation.all_donations()
+
+    return render(request, 'donations.html', {"donations": donations})
+
+
+
 
 @api_view(['GET', 'POST','DELETE'])
 def appeal_list(request):
@@ -103,10 +118,6 @@ def donation_list(request):
         count = Donation.objects.all().delete()
         return JsonResponse({'message': '{} donations were deleted successfully'.format(count[0])}, status=status.HTTP_204_NO_CONTENT)
 
-
-def home(request):
-
-    return render(request, 'index.html')
 
 
 
