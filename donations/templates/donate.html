@@ -1,0 +1,20 @@
+{%extends 'base.html'%}
+
+{% block content %}
+{{block.super}}
+
+
+<h3> Make a pledge here </h3>
+
+<form action="" method="post">
+
+    {% csrf_token %}
+    {{form}}
+
+    <input type="submit" value="OK">
+</form>
+
+
+
+{% endblock content %}
+

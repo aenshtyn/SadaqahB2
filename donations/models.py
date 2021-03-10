@@ -46,8 +46,8 @@ class Appeal(models.Model):
     # appealer = models.ForeignKey(Appealer, on_delete=models.CASCADE, default='admin')
     title = models.CharField(max_length=70, blank=False, default='')
     description = models.TextField()
-    tag = models.ManyToManyField(Tag, blank=True)
-    published = models.BooleanField(default=False)
+    # tag = models.ManyToManyField(Tag, blank=True)
+    # published = models.BooleanField(default=False)
     amount = models.IntegerField (default='1')
     address = models.CharField(max_length = 30, default= '')
     image = models.ImageField(upload_to='appeals/', default='appeals/appeal.png')
@@ -85,6 +85,12 @@ class Donation(models.Model):
 
     def __str__(self):
         return self.title
+
+    @classmethod
+    def all_donations(cls):
+        donations = Donation.objects.all()
+        return donations
+
 
     def save_donation(self):
         return self.save()

@@ -10,6 +10,10 @@ from .models import Appeal, Donation, Location
 from .models import Donation
 from donations.serializers import AppealSerializer, DonationSerializer
 from rest_framework.decorators import api_view
+from .forms import AppealForm, DonationForm
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views import generic
 # Create your views here.=l
 
 
@@ -19,12 +23,56 @@ def home(request):
 
     return render(request, 'index.html',{"locations": locations, "appeals": appeals})
 
+def appeals(request):
+    appeals = Appeal.all_appeals()
+
+    return render(request, 'appeals.html', {"appeals": appeals})
+
 def donations(request):
     donations = Donation.all_donations()
 
     return render(request, 'donations.html', {"donations": donations})
 
+def contact(request):
+    return render(request, 'contact.html')
 
+def about(request):
+    return render(request, 'about.html')
+
+def works(request):
+    return render(request, 'works.html')
+
+def register(request):
+    return render(request, 'registration.html')
+
+def add(request):
+    context ={} 
+  
+    # create object of form 
+    form = AppealForm(request.POST or None, request.FILES or None) 
+      
+    # check if form data is valid 
+    if form.is_valid(): 
+        # save the form data to model 
+        form.save() 
+  
+    context['form']= form 
+    return render(request, 'add.html', context)
+
+def donate(request):
+    context ={} 
+    
+        # create object of form 
+    form = DonationForm(request.POST or None, request.FILES or None) 
+      
+    # check if form data is valid 
+    if form.is_valid(): 
+        # save the form data to model 
+        form.save() 
+  
+    context['form']= form 
+  
+    return render(request, 'donate.html', context)
 
 
 @api_view(['GET', 'POST','DELETE'])
@@ -147,3 +195,8 @@ class DonationList(APIView):
             serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)   
+
+class SignUpView(generic.CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'registration/signup.html'
