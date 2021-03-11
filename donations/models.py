@@ -1,5 +1,7 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.contrib.auth.models import User
 from location_field.models.plain import PlainLocationField
 
@@ -12,6 +14,22 @@ class Appealer(models.Model):
 
     def __str__(self):
         return self.first_name
+
+# class Profile(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     first_name = models.CharField(max_length=100, blank=True)
+#     last_name = models.CharField(max_length=100, blank=True)
+#     email = models.EmailField(max_length=150)
+#     bio = models.TextField()
+
+#     def __str__(self):
+#         return self.user.username
+
+# @receiver(post_save, sender=User)
+# def update_profile_signal(sender, instance, created, **kwargs):
+#     if created:
+#         Profile.objects.create(user=instance)
+#     instance.profile.save()
 
 class Tag(models.Model):
     name = models.CharField(max_length = 30)
@@ -43,11 +61,12 @@ class Location(models.Model):
 
 
 class Appeal(models.Model):
-    # appealer = models.ForeignKey(Appealer, on_delete=models.CASCADE, default='admin')
+    # appealer = models.ForeignKey(Appealer, on_delete=models.CASCADE, blank=True)
+    # user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, default='aenshtyn')
     title = models.CharField(max_length=70, blank=False, default='')
     description = models.TextField()
-    # tag = models.ManyToManyField(Tag, blank=True)
-    # published = models.BooleanField(default=False)
+    tag = models.ManyToManyField(Tag, blank=True)
+    published = models.BooleanField(default=False)
     amount = models.IntegerField (default='1')
     address = models.CharField(max_length = 30, default= '')
     image = models.ImageField(upload_to='appeals/', default='appeals/appeal.png')

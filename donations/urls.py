@@ -4,7 +4,7 @@ from donations import views
 from django.conf import settings
 from django.urls import path
 
-from .views import SignUpView
+# from .views import SignUpView
 
 
 urlpatterns = [
@@ -17,8 +17,9 @@ urlpatterns = [
     url(r'^works$', views.works, name='works'),
     url(r'^add$', views.add, name='add'),
     url(r'^donate$', views.donate, name='donate'),
+    url(r'^profile$', views.profile, name='profile'),
 
-    path('signup/', SignUpView.as_view(), name='signup'),
+    path('signup/', views.signup, name='signup'),
 
 
 

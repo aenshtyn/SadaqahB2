@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http  import HttpResponse, Http404
 # from django.shortcuts import render
 from django.http.response import JsonResponse
@@ -10,13 +10,31 @@ from .models import Appeal, Donation, Location
 from .models import Donation
 from donations.serializers import AppealSerializer, DonationSerializer
 from rest_framework.decorators import api_view
-from .forms import AppealForm, DonationForm
+from .forms import AppealForm, DonationForm, SignUpForm
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
 # Create your views here.=l
 
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            return redirect('index')
+    else:
+        form = SignUpForm()
+    return render(request, 'registration/signup.html', {'form': form})
 
+def profile(request):
+    return render(request, 'profile.html')
+
+    
 def home(request):
     appeals = Appeal.all_appeals()
     locations = Location.all_locations()
@@ -196,7 +214,7 @@ class DonationList(APIView):
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)   
 
-class SignUpView(generic.CreateView):
-    form_class = UserCreationForm
-    success_url = reverse_lazy('login')
-    template_name = 'registration/signup.html'
+# class SignUpView(generic.CreateView):
+#     form_class = UserCreationForm
+#     success_url = reverse_lazy('login')
+#     template_name = 'registration/signup.html'

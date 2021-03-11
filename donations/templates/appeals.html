@@ -5,13 +5,16 @@
    
     <div class="row">
         {% for appeal in appeals %}
-        <div class="col-md-3">
+        <div class="col-md-3 d-flex align-items-stretch">
             <div class="card" style="width: 18rem;">
                 <img src="{{appeal.image.url}}" class="img-responsive" data-toggle="modal" data-target="#exampleModal">
 
                 <div class="card-body">
                     <h5 class="card-title">{{appeal.title}}</h5>
                     <p class="card-text">{{appeal.description}}</p>
+                    <p class="card-text">{{appeal.tag}}</p>
+                    <p class="card-text">{{appeal.amount}}</p>
+                    <p class="card-text">{{appeal.address }}</p>
                     <a data-target="#exampleModal" class="btn btn-primary">Read More</a>
                 </div>
             </div>
